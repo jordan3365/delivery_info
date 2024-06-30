@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배송지도</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* 추가적인 스타일링은 여기에 */
+    .form-group {
+      margin-bottom: 20px; /* 폼 요소 간격 조정 */
+    }
+    .image-gallery img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    /* 테이블 스타일링 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+      white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- 왼쪽: 배송처 선택 -->
+      <div class="col-md-4">
+        <img src="./img/nav_logo.png" alt="로고" width="50">착한식판
+        <div class="form-group">
+            <hr>
+          <label for="deliverySelect"><h4>배송처 목록</h4></label>
+          <select class="form-control" id="deliverySelect">
+            <option value="">선택</option>
+            <!-- 여기에 배송처 옵션을 동적으로 추가할 예정 -->
+          </select>
+        </div>
+      </div>
+      <!-- 오른쪽: 상세 정보 -->
+      <div class="col-md-8">
+        <h4>상세 정보</h4>
+        <table id="detailTable">
+          <tr>
+            <th>ID</th>
+            <td id="detailId"></td>
+          </tr>
+          <tr>
+            <th>코스</th>
+            <td id="detailCourse"></td>
+          </tr>
+          <tr>
+            <th>배송처명</th>
+            <td id="detailName"></td>
+          </tr>
+          <tr>
+            <th>주소1</th>
+            <td id="detailAddress1"></td>
+          </tr>
+          <tr>
+            <th>주소2</th>
+            <td id="detailAddress2"></td>
+          </tr>
+          <tr>
+            <th>전화번호</th>
+            <td id="detailPhone"></td>
+          </tr>
+          <tr>
+            <th>박스 수량</th>
+            <td id="detailBoxCount"></td>
+          </tr>
+          <tr>
+            <th>메모</th>
+            <td id="detailMemo"></td>
+          </tr>
+          <tr>
+            <th>수배송 장소</th>
+            <td id="detailDeliveryPlace" class="image-gallery"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 부트스트랩 및 필수 자바스크립트 -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- 자신의 스크립트 파일 또는 추가 스크립트 -->
+  <script src="script.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      // 가상의 데이터 - 실제 데이터와 교체 필요
+      var deliveryPlaces = [
+        { 
+          id: 1, 
+          course: "1", 
+          name: "킹스키즈-도곡", 
+          address1: "서울특별시 강남구 선릉로64길 15-13", 
+          address2: "", 
+          phone: "02-565-1605", 
+          boxCount: 1, 
+          memo: "2층 3층 중간계단 수배송",
+          deliveryPlaceImages: ["./img/map1_2.jpg", "./img/map1.jpg", "image3.jpg", "image4.jpg"] 
+        },
+        { 
+          id: 2, 
+          course: "1", 
+          name: "주니어학원", 
+          address1: "서울특별시 강남구 도곡로 184", 
+          address2: "5층", 
+          phone: "02-3463-8747", 
+          boxCount: 2, 
+          memo: "5층 학원입구 앞",
+          deliveryPlaceImages: ["./img/map2.jpg", "./img/map2_3.jpg", "./img/map2_2.jpg", "image8.jpg"] 
+        },
+        { 
+            id: 3, 
+            course: "1", 
+            name: "아기사랑어린이집", 
+            address1: "서울특별시 강남구 도곡로 18길 35", 
+            address2: "도곡현대@3동 103호", 
+            phone: "02-571-3022", 
+            boxCount: 1, 
+            memo: "공동현관비밀번호 : / 문앞",
+            deliveryPlaceImages: ["", "", "", ""] 
+          },
+          { 
+            id: 4, 
+            course: "1", 
+            name: "충현어린이집", 
+            address1: "서울특별시 강남구 테헤란로27길 41", 
+            address2: "충현교회 제2교육 별관", 
+            phone: "02-554-7055", 
+            boxCount: 1, 
+            memo: "1층 입구 앞 배식카트",
+            deliveryPlaceImages: ["./img/map3.jpg", "./img/map3_2.jpg", "", ""] 
+          },
+          { 
+            id: 5, 
+            course: "1", 
+            name: "성결유치원", 
+            address1: "서울특별시 강남구 언주로121길 5", 
+            address2: "", 
+            phone: "02-548-9754", 
+            boxCount: 1, 
+            memo: "입구 앞",
+            deliveryPlaceImages: ["./img/map4.jpg", "./img/map4_2.jpg", "", ""] 
+          },
+          { 
+            id: 6, 
+            course: "1", 
+            name: "아크로힐스(논현)어린이집", 
+            address1: "서울특별시 강남구 언주로 604 ", 
+            address2: "101동1층", 
+            phone: "02-547-1677", 
+            boxCount: 1, 
+            memo: "입구 앞",
+            deliveryPlaceImages: ["./img/map5.jpg", "./img/map5_2.jpg", "", ""] 
+          },
+          { 
+            id: 7, 
+            course: "1", 
+            name: "에더블빌리지", 
+            address1: "서울특별시 강남구 봉은사로49길 39 ", 
+            address2: "라이브러리/가든", 
+            phone: "02-525-8934", 
+            boxCount: 4, 
+            memo: "라이브러리(2) / 가든(2) 별도 지정 장소",
+            deliveryPlaceImages: ["./img/map6.jpg", "./img/map6_2.jpg", "./img/map6_3.jpg", "./img/map6_4.jpg"] 
+          },
+          { 
+            id: 8, 
+            course: "1", 
+            name: "에듀케어어린이집", 
+            address1: "서울특별시 강남구 선릉로130길 19 ", 
+            address2: "서광@ 101동 108호", 
+            phone: "02-517-1417", 
+            boxCount: 1, 
+            memo: "공동현관비밀번호 : #*01080108# / 108호 앞",
+            deliveryPlaceImages: ["", "", "", ""] 
+          },
+          { 
+            id: 9, 
+            course: "1", 
+            name: "청담몬테소리유치원", 
+            address1: "서울특별시 강남구 학동로67길 15 ", 
+            address2: "", 
+            phone: "02-546-3369", 
+            boxCount: 4, 
+            memo: "2층(2) / 3층(2) 구분 수배송 / 14:00시",
+            deliveryPlaceImages: ["./img/map7.jpg", "./img/map7_2.jpg", "./img/map7_3.jpg", ""] 
+          },
+          { 
+            id: 10, 
+            course: "1", 
+            name: "영동제일유치원", 
+            address1: "서울특별시 강남구 삼성로120길 28 ", 
+            address2: "", 
+            phone: "02-544-3111", 
+            boxCount: 3, 
+            memo: "1층 입구 왼쪽",
+            deliveryPlaceImages: ["./img/map8.jpg", "./img/map8_2.jpg", "", ""] 
+          },
+        // 원하는 만큼 데이터 추가
+      ];
+
+      // 배송처 선택 셀렉트 박스에 옵션 추가
+      var $deliverySelect = $('#deliverySelect');
+      deliveryPlaces.forEach(function(place) {
+        var $option = $('<option></option>').attr('value', place.id).text(place.name);
+        $deliverySelect.append($option);
+      });
+
+      // 배송처 선택 시 상세 정보 표시
+      $deliverySelect.change(function() {
+        var selectedId = parseInt($(this).val());
+        var selectedPlace = deliveryPlaces.find(function(place) {
+          return place.id === selectedId;
+        });
+        if (selectedPlace) {
+          displayDetails(selectedPlace);
+        } else {
+          // 선택된 배송처가 없을 경우 초기화
+          resetDetails();
+        }
+      });
+
+      // 초기화 함수
+      function resetDetails() {
+        $('#detailId').text('');
+        $('#detailCourse').text('');
+        $('#detailName').text('');
+        $('#detailAddress1').text('');
+        $('#detailAddress2').text('');
+        $('#detailPhone').text('');
+        $('#detailBoxCount').text('');
+        $('#detailMemo').text('');
+        $('#detailDeliveryPlace').empty();
+      }
+
+      // 상세 정보 표시 함수
+      function displayDetails(place) {
+        $('#detailId').text(place.id);
+        $('#detailCourse').text(place.course);
+        $('#detailName').text(place.name);
+        $('#detailAddress1').html(place.address1 + ' <a href="https://www.google.com/maps/search/' + encodeURI(place.address1) + '" class="btn btn-sm btn-primary" target="_blank">네비게이션</a>');
+        $('#detailAddress2').text(place.address2);
+        $('#detailPhone').html(place.phone + ' <a href="tel:' + place.phone + '" class="btn btn-sm btn-success">전화연결</a>');
+        $('#detailBoxCount').text(place.boxCount);
+        $('#detailMemo').text(place.memo);
+
+        // 수배송 장소 이미지 갤러리 표시
+        var $detailDeliveryPlace = $('#detailDeliveryPlace');
+        $detailDeliveryPlace.empty();
+        place.deliveryPlaceImages.forEach(function(image) {
+          var $img = $('<img class="img-fluid img-thumbnail mx-2 my-2">').attr('src', image);
+          $detailDeliveryPlace.append($img);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
